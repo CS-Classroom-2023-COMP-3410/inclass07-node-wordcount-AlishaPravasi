@@ -1,11 +1,16 @@
+// Mock chalk for Jest
+jest.mock('chalk', () => ({
+    blue: (text) => `BLUE(${text})`,
+    green: (text) => `GREEN(${text})`,
+    red: (text) => `RED(${text})`,
+}));
+
 const {
     readFileContent,
     getWordCounts,
     colorWord,
     printColoredLines
 } = require('../app.js');
-
-const chalk = require('chalk');
 
 describe('readFileContent', () => {
     it('should read content of declaration.txt', () => {
@@ -28,9 +33,9 @@ describe('getWordCounts', () => {
 
 describe('colorWord', () => {
     it('should color words based on frequency', () => {
-        expect(colorWord("test", 1)).toBe(chalk.blue("test"));
-        expect(colorWord("test", 3)).toBe(chalk.green("test"));
-        expect(colorWord("test", 7)).toBe(chalk.red("test"));
+        expect(colorWord("test", 1)).toBe("BLUE(test)");
+        expect(colorWord("test", 3)).toBe("GREEN(test)");
+        expect(colorWord("test", 7)).toBe("RED(test)");
     });
 });
 
@@ -55,8 +60,8 @@ Bye World!`;
         
         printColoredLines(content, wordCounts);
 
-        expect(consoleOutput[0]).toBe(chalk.green('Hello') + ' ' + chalk.green('World') + ' ');
-        expect(consoleOutput[1]).toBe(chalk.green('Hello') + ' ' + chalk.green('World') + ' ');
-        expect(consoleOutput[2]).toBe(chalk.blue('Bye') + ' ' + chalk.green('World') + ' ');
+        expect(consoleOutput[0]).toBe("GREEN(Hello) GREEN(World) ");
+        expect(consoleOutput[1]).toBe("GREEN(Hello) GREEN(World) ");
+        expect(consoleOutput[2]).toBe("BLUE(Bye) GREEN(World) ");
     });
 });
